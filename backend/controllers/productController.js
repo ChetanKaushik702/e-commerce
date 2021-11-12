@@ -1,28 +1,22 @@
 const Product = require('../models/productModel');
+const ErrorHandler = require('../utils/errorHandler');
+const AsyncErrorHandler = require('../middlerware/catchAsyncError');
 
 // Create product :- ADMIN
-createProduct = async (req, res, next) => {
-    try {
+createProduct = AsyncErrorHandler(async (req, res, next) => {
         const product = await Product.create(req.body);
         res.status(201).json({
             success: true,
             product
         })
-    } catch (err) {
-        console.log(err);
-    }
-}
+});
 
 // Update product :- ADMIN
-updateProduct = async (req, res, next) => {
-    try {
+updateProduct = AsyncErrorHandler(async (req, res, next) => {
         const id = req.params.id;
         let product = await Product.findById(id);
         if (!product) {
-            res.status(500).json({
-                success: false,
-                message: 'Product not found!'
-            })
+            return next(new ErrorHandler('Product not found!', 404));
         }
         product = await Product.findByIdAndUpdate(id, req.body, {
             new: true,
@@ -33,25 +27,46 @@ updateProduct = async (req, res, next) => {
             success: true,
             product
         })
-    } catch(err) {
-        console.log(err);
-    }
-}
+});
 
-getAllProducts = async (req, res) => {
-    try {
+// Delete a product :- ADMIN
+deleteProduct = AsyncErrorHandler(async (req, res, next) => {
+        const id = req.params.id;
+        const product = await Product.findById(id);
+        if (!product) {
+            return next(new ErrorHandler('Product not found!', 404));
+        }
+        await product.remove();
+        res.status(200).json({
+            success: true,
+            message: 'Product deleted successfully!'
+        })
+});
+
+getAllProducts = AsyncErrorHandler(async (req, res) => {
         const products = await Product.find();
         res.status(200).json({
             success: true,
             products
         })
-    } catch(err) {
-        console.log(err);
-    }
-}
+});
+
+getProductDetails = AsyncErrorHandler(async (req, res, next) => {
+        const id = req.params.id;
+        const product = await Product.findById(id);
+        if (!product) {
+            return next(new ErrorHandler('Product not found!', 404));
+        }
+        res.status(200).json({
+            success: true,
+            product
+        })
+});
 
 module.exports = {
     getAllProducts,
     createProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct,
+    getProductDetails
 }
