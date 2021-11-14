@@ -16,7 +16,14 @@ class ApiFeatures {
         return this;
     }
 
-    
+    filter () {
+        const category = this.queryStr.category ? {
+            category: this.queryStr.category
+        } : {};
+
+        this.query = this.query.find(category);
+        return this;
+    }
 }
 
 module.exports = ApiFeatures;

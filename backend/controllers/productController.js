@@ -46,7 +46,8 @@ deleteProduct = AsyncErrorHandler(async (req, res, next) => {
 
 getAllProducts = AsyncErrorHandler(async (req, res) => {
         const apiFeatures = new ApiFeatures(Product.find(), req.query)
-            .search();
+            .search()
+            .filter();
         
         const products = await apiFeatures.query;
         res.status(200).json({
