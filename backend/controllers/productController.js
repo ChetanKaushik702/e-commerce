@@ -45,14 +45,19 @@ deleteProduct = AsyncErrorHandler(async (req, res, next) => {
 });
 
 getAllProducts = AsyncErrorHandler(async (req, res) => {
+        const resPerPage = 5;
+        const productsCount = await Product.countDocuments();
+
         const apiFeatures = new ApiFeatures(Product.find(), req.query)
             .search()
-            .filter();
+            .filter()
+            .pagination(resPerPage);
         
         const products = await apiFeatures.query;
         res.status(200).json({
             success: true,
-            products
+            products,
+            productsCount
         })
 });
 

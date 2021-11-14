@@ -24,6 +24,14 @@ class ApiFeatures {
         this.query = this.query.find(category);
         return this;
     }
+
+    pagination (resPerPage) {
+        const currPage = Number(this.queryStr.page) || 1;
+        const skip = resPerPage * (currPage - 1);
+        
+        this.query = this.query.limit(resPerPage).skip(skip);
+        return this;
+    }
 }
 
 module.exports = ApiFeatures;
