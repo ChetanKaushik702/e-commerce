@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 
 // error middleware
 const errorMiddleware = require('./middlerware/error');
@@ -6,6 +7,7 @@ const errorMiddleware = require('./middlerware/error');
 const app = express(); 
 
 app.use(express.json());
+app.use(cookieParser());
 
 // routes
 const product = require('./routes/productRoute');
