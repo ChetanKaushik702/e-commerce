@@ -150,6 +150,89 @@ const updatePassword = AsyncErrorHandler(async (req, res, next) => {
     sendToken(user, 200, res);
 })
 
+// update profile
+const updateProfile = AsyncErrorHandler(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email
+    };
+
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators: true,
+        findAndModify: false
+    });
+
+    res.status(200).json({
+        success: true,
+        user
+    });
+})
+
+// get All Users : ADMIN
+const getAllUsers = AsyncErrorHandler(async (req, res, next) => {
+    const users = await User.find();
+    res.status(200).json({
+        success: true,
+        users
+    });
+})
+
+// get A Single User : ADMIN
+const getASingleUser = AsyncErrorHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return next(new ErrorHandler(`User doesn\'t exist with id: ${req.params.id}`, 400));
+    }
+
+    res.status(200).json({
+        success: true,
+        user
+    });
+})
+
+// update user role: ADMIN
+const updateUserRole = AsyncErrorHandler(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+        role: req.body.role
+    };
+
+    let user = await User.findById(req.params.id);
+
+    if (!user) {
+        return next(new ErrorHandler(`User doesn\'t exist with id: ${req.params.id}`, 400));
+    }
+    user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+        new: true,
+        runValidators: true,
+        findAndModify: false
+    });
+
+    res.status(200).json({
+        success: true,
+        user
+    });
+})
+
+// delete user: ADMIN
+const deleteUser = AsyncErrorHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return next(new ErrorHandler(`User doesn\'t exist with id: ${req.params.id}`, 400));
+    }
+
+    await user.remove();
+
+    res.status(200).json({
+        success: true,
+        message: 'User deleted successfully'
+    });
+})
+
 module.exports = {
     addUser,
     loginUser,
@@ -157,5 +240,10 @@ module.exports = {
     forgotPassword,
     resetPassword,
     getUserDetails,
-    updatePassword
+    updatePassword,
+    updateProfile,
+    getAllUsers,
+    getASingleUser,
+    updateUserRole,
+    deleteUser
 }
