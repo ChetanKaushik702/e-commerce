@@ -3,6 +3,7 @@ const ErrorHandler = require('../utils/errorHandler');
 const AsyncErrorHandler = require('../middlerware/catchAsyncError');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
+const crypto = require('crypto');
 
 // adding a user
 const addUser = AsyncErrorHandler(async (req, res, next) => {
@@ -91,9 +92,37 @@ const forgotPassword = AsyncErrorHandler(async (req, res, next) => {
     }
 });
 
+// reset password
+const resetPassword = AsyncErrorHandler(async (req, res, next) => {
+    // Hashing and adding resetPasswordToken to userSchema
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        expirePasswordToken: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        return next(new ErrorHandler('Invalid/expired reset password token', 400));
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHandler('Password didn\'t match', 400));
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.expirePasswordToken = undefined;
+
+    await user.save();
+
+    sendToken(user, 200, res);
+})
+
 module.exports = {
     addUser,
     loginUser,
     logoutUser,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 }
