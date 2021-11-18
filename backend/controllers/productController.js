@@ -4,7 +4,7 @@ const AsyncErrorHandler = require('../middlerware/catchAsyncError');
 const ApiFeatures = require('../utils/apiFeatures');
 
 // Create product :- ADMIN
-createProduct = AsyncErrorHandler(async (req, res, next) => {
+const createProduct = AsyncErrorHandler(async (req, res, next) => {
         req.body.createdBy = req.user.id;
         const product = await Product.create(req.body);
         res.status(201).json({
@@ -14,7 +14,7 @@ createProduct = AsyncErrorHandler(async (req, res, next) => {
 });
 
 // Update product :- ADMIN
-updateProduct = AsyncErrorHandler(async (req, res, next) => {
+const updateProduct = AsyncErrorHandler(async (req, res, next) => {
         const id = req.params.id;
         let product = await Product.findById(id);
         if (!product) {
@@ -32,7 +32,7 @@ updateProduct = AsyncErrorHandler(async (req, res, next) => {
 });
 
 // Delete a product :- ADMIN
-deleteProduct = AsyncErrorHandler(async (req, res, next) => {
+const deleteProduct = AsyncErrorHandler(async (req, res, next) => {
         const id = req.params.id;
         const product = await Product.findById(id);
         if (!product) {
@@ -45,7 +45,7 @@ deleteProduct = AsyncErrorHandler(async (req, res, next) => {
         })
 });
 
-getAllProducts = AsyncErrorHandler(async (req, res) => {
+const getAllProducts = AsyncErrorHandler(async (req, res) => {
         const resPerPage = 5;
         const productsCount = await Product.countDocuments();
 
@@ -62,7 +62,7 @@ getAllProducts = AsyncErrorHandler(async (req, res) => {
         })
 });
 
-getProductDetails = AsyncErrorHandler(async (req, res, next) => {
+const getProductDetails = AsyncErrorHandler(async (req, res, next) => {
         const id = req.params.id;
         const product = await Product.findById(id);
         if (!product) {
@@ -74,10 +74,108 @@ getProductDetails = AsyncErrorHandler(async (req, res, next) => {
         })
 });
 
+// adding comment feature
+const createProductReview = AsyncErrorHandler(async (req, res, next) => {
+    const {rating, comment, productId} = req.body;
+
+    const review = {
+        user: req.user._id,
+        name: req.user.name,
+        rating: Number(rating),
+        comment
+    }
+
+    const product = await Product.findById(productId);
+    
+    if (!product) {
+        return next(new ErrorHandler(`Product with productId: ${productId} doesn\'t exist`, 400));
+    }
+
+    const isAlreadyReviewed = product.reviews.find(rev => rev.user.toString() === req.user._id);
+
+    if (isAlreadyReviewed) {
+        product.reviews.find(rev => {
+            if (rev.user.toString() === req.user._id) {
+                rev.rating = rating;
+                rev.comment = comment;
+            }
+        })
+    } else {
+        product.reviews.push(review);
+        product.numOfReviews = product.reviews.length;
+    }
+
+    let sumOfRatings = 0;
+    product.reviews.forEach(rev => {
+        sumOfRatings += rev.rating
+    });
+    
+    product.rating = sumOfRatings / product.reviews.length;
+
+    await product.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true
+    });
+})
+
+// get all reviews
+const getAllReviews = AsyncErrorHandler(async (req, res, next) => {
+    const product = await Product.findById(req.query.id);
+
+    if (!product) {
+        return next(new ErrorHandler('Product not found', 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        reviews: product.reviews
+    });
+})
+
+// delete a review
+const deleteReview = AsyncErrorHandler(async (req, res, next) => {
+    const product = await Product.findById(req.params.productId);
+
+    if (!product) {
+        return next(new ErrorHandler('Product not found', 404));
+    }
+
+    const reviews = product.reviews.filter(rev => rev._id.toString() !== req.query.id.toString());
+
+    let sumOfReviews = 0;
+
+    reviews.forEach(rev => {
+        sumOfReviews += rev.rating;
+    });
+
+    const rating = sumOfReviews / reviews.length;
+
+    const numOfReviews = reviews.length;
+
+    await Product.findByIdAndUpdate(req.query.productId, {
+        reviews,
+        rating,
+        numOfReviews
+    }, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    });
+
+    res.status(200).json({
+        success: true
+    });
+})
+
 module.exports = {
     getAllProducts,
     createProduct,
     updateProduct,
     deleteProduct,
-    getProductDetails
+    getProductDetails,
+    createProductReview,
+    getAllProducts,
+    getAllReviews,
+    deleteReview
 }
