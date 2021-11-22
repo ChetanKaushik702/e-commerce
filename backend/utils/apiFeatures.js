@@ -17,11 +17,19 @@ class ApiFeatures {
     }
 
     filter () {
-        const category = this.queryStr.category ? {
-            category: this.queryStr.category
-        } : {};
+        const queryCopy = { ...this.queryStr };
+        //   Removing some fields for category
+        const removeFields = ["keyword", "page", "limit"];
 
-        this.query = this.query.find(category);
+        removeFields.forEach((key) => delete queryCopy[key]);
+
+        // Filter For Price and Rating
+
+        let queryStr = JSON.stringify(queryCopy);
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+
+        this.query = this.query.find(JSON.parse(queryStr));
+
         return this;
     }
 

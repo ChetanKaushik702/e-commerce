@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 
 function Products() {
     const [currentPage, setCurrentPage] = useState(1);
-    const [price, setPrice] = useState([0, 25000]);
+    const [price, setPrice] = useState([0, 100000]);
 
     const dispatch = useDispatch();
     const alert = useAlert();
@@ -55,7 +55,7 @@ function Products() {
                                 valueLabelDisplay="auto"
                                 aria-labelledby="range-slider"
                                 min={0}
-                                max={25000}
+                                max={100000}
                             />
                         </div>
                         {
