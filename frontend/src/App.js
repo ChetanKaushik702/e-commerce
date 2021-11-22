@@ -6,6 +6,7 @@ import Header from './components/layout/Header/Header';
 import Footer from './components/layout/Footer/Footer';
 import Home from './components/Home/Home';
 import ProductDetails from './components/Product/ProductDetails';
+import Products from './components/Product/Products';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/product/:id' element={<ProductDetails />} />
+        <Route path='/products' element={<Products />} />
       </Routes>
       <Footer />
     </Router>
