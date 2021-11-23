@@ -27,6 +27,7 @@ function Header() {
             nav4justifyContent="flex-start"
             link1ColorHover="#eb4034"
             link1Margin="1vmax"
+            profileIconUrl="/login"
             profileIconColor="rgba(35, 35, 35, 0.8)"
             searchIconColor="rgba(35, 35, 35, 0.8)"
             cartIconColor="rgba(35, 35, 35, 0.8)"
