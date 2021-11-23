@@ -1,11 +1,11 @@
 import React from 'react';
-import Hemlet from 'react-helmet';
+import Helmet from 'react-helmet';
 
 const MetaData = ({ title }) => {
     return (
-        <Hemlet>
+        <Helmet>
             <title>{title}</title>
-        </Hemlet>
+        </Helmet>
     )
 }
 
