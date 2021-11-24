@@ -13,6 +13,8 @@ import store from './store';
 import { loadUser } from './actions/userAction';
 import { useSelector } from 'react-redux';
 import UserOptions from './components/layout/Header/UserOptions';
+import Profile from './components/User/Profile';
+import './Profile.css';
 
 function App() {
 
@@ -39,6 +41,7 @@ function App() {
         <Route path='/products/:keyword' element={<Products />} />
         <Route path='/search' element={<Search />} />
         <Route path='/login' element={<LoginSignup />}/>
+        <Route path='/account' element={<Profile />}/>
       </Routes>
       <Footer />
     </Router>
