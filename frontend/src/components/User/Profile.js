@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Loader from '../layout/Loader/Loader';
 import { useNavigate } from 'react-router';
+import './Profile.css';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Profile = () => {
                             <div>
                                 <h1>My Profile</h1>
                                 <img src={user.avatar.url} alt={user.name}/>
-                                <Link to='/me/profile'>Edit Profile</Link>
+                                <Link to='/update-profile'>Edit Profile</Link>
                             </div>
                             <div>
                                 <div>
