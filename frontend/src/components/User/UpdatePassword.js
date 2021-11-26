@@ -7,6 +7,7 @@ import { UPDATE_PASSWORD_RESET } from "../../constants/userConstants";
 import Loader from "../layout/Loader/Loader";
 import MetaData from "../layout/MetaData";
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import './UpdatePassword.css';
 
 const UpdatePassword = () => {
@@ -61,8 +62,8 @@ const UpdatePassword = () => {
                 className="updatePasswordForm"
                 onSubmit={updatePasswrodSubmit}
               >
-                  <div className='loginPassword'>
-                    <VpnKeyIcon />
+                  <div className='updatePassword'>
+                    <VpnKeyIcon className='vpnKeyIcon'/>
                     <input 
                         type='password'
                         placeholder='Old Password'
@@ -71,8 +72,8 @@ const UpdatePassword = () => {
                         onChange={(e) => setOldPassword(e.target.value)}
                     />
                   </div>
-                  <div className='loginPassword'>
-                    <VpnKeyIcon />
+                  <div className='updatePassword'>
+                    <LockOpenIcon className='vpnKeyIcon'/>
                     <input 
                         type='password'
                         placeholder='New Password'
@@ -81,8 +82,8 @@ const UpdatePassword = () => {
                         onChange={(e) => setNewPassword(e.target.value)}
                     />
                   </div>
-                  <div className='loginPassword'>
-                    <VpnKeyIcon />
+                  <div className='updatePassword'>
+                    <LockOpenIcon className='vpnKeyIcon'/>
                     <input 
                         type='password'
                         placeholder='Confirm Password'
