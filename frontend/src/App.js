@@ -22,6 +22,9 @@ import ResetPassword from './components/User/ResetPassword';
 import Cart from './components/Cart/Cart';
 import Shipping from './components/Cart/Shipping';
 import ConfirmOrder from './components/Cart/ConfirmOrder';
+import Payment from './components/Cart/Payment';
+import PaymentProtectedRoute from "./components/Route/PaymentProtectedRoute";
+import OrderSuccess from './components/Cart/OrderSuccess';
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -71,6 +74,8 @@ function App() {
         <Route exact path='/cart' element={<Cart />}/>
         <Route exact path='/shipping' element={<ProtectedRoute component={Shipping}/>}/>
         <Route exact path='/order/confirm' element={<ProtectedRoute component={ConfirmOrder}/>}/>
+        <Route exact path='/process/payment' element={<PaymentProtectedRoute component={Payment}/>}/>
+        <Route exact path='/success' element={<ProtectedRoute component={OrderSuccess}/>}/>
       </Routes>
       <Footer />
     </Router>
