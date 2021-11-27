@@ -1,5 +1,5 @@
 import React, { Fragment, useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './LoginSignup.css';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -14,6 +14,7 @@ const LoginSignup = () => {
     const dispatch = useDispatch();
     const alert = useAlert();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const {error, loading, isAuthenticated} = useSelector(state => state.user);
 
@@ -67,6 +68,8 @@ const LoginSignup = () => {
         }
     }
 
+    const redirect = location.search ? `/${location.search.split("=")[1]}` : '/account';
+
     useEffect(() => {
         if (error) {
             alert.error(error);
@@ -74,9 +77,9 @@ const LoginSignup = () => {
         }
 
         if (isAuthenticated) {
-            navigate('/account');
+            navigate(redirect);
         }
-    }, [dispatch, error, alert, navigate, isAuthenticated]);
+    }, [dispatch, error, alert, navigate, isAuthenticated, redirect]);
 
     const switchTabs = (e, tab) => {
         if (tab === 'login') {
