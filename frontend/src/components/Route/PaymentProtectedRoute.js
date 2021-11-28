@@ -23,7 +23,7 @@ const PaymentProtectedRoute = ({ component: Component }) => {
 
 
 
-  return isAuthenticated ? stripeApiKey && <Elements stripe={loadStripe(stripeApiKey)}><Component /></Elements> : <Navigate to="/login" />;
+  return isAuthenticated === true ? stripeApiKey && <Elements stripe={loadStripe(stripeApiKey)}><Component /></Elements> : <Navigate to="/login" />;
 };
 
 export default PaymentProtectedRoute;

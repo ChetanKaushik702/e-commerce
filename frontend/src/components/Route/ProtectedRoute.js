@@ -6,7 +6,7 @@ const ProtectedRoute = ({ component: Component }) => {
     const { isAuthenticated, loading } = useSelector(state => state.user);
     if (loading === undefined || loading === true)
         return <></>;
-    return isAuthenticated ? <Component /> : <Navigate to='/login'/>;
+    return isAuthenticated === true ? <Component /> : <Navigate to='/login'/>;
 }
 
 export default ProtectedRoute;
