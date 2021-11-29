@@ -1,26 +1,48 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React, { Fragment, useEffect } from "react";
+import './ProductList.css';
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, getAdminProduct } from "../../actions/productAction";
+import { clearErrors, deleteProduct, getAdminProduct } from "../../actions/productAction";
 import MetaData from "../layout/MetaData";
 import Sidebar from "./Sidebar";
-import './ProductList.css';
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { DELETE_PRODUCT_RESET } from "../../constants/productConstants";
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
+  const navigate = useNavigate();
 
   const { error, products } = useSelector((state) => state.products);
+  const { error: deleteError, isDeleted } = useSelector(state => state.product);
 
+  const deleteProductHandler = (id) => {
+    dispatch(deleteProduct(id));
+  }
     useEffect(() => {
         if (error) {
             alert.error(error);
             dispatch(clearErrors());
         }
 
+        if (deleteError) {
+          alert.error(deleteError);
+          dispatch(clearErrors());
+        }
+
+        if (isDeleted) {
+          alert.success('Product deleted successfully!');
+          navigate('/admin/dashboard');
+          dispatch({type: DELETE_PRODUCT_RESET});
+        }
+
         dispatch(getAdminProduct());
-    }, [dispatch, alert, error]);
+    }, [dispatch, alert, error, deleteError, navigate, isDeleted]);
 
   const columns = [
     { field: "id", headerName: "Product ID", minWidth: 200, flex: 0.5 },
@@ -54,23 +76,23 @@ const ProductList = () => {
       minWidth: 150,
       type: "number",
       sortable: false,
-    //   renderCell: (params) => {
-    //     return (
-    //       <Fragment>
-    //         <Link to={`/admin/product/${params.getValue(params.id, "id")}`}>
-    //           <EditIcon />
-    //         </Link>
+      renderCell: (params) => {
+        return (
+          <Fragment>
+            <Link to={`/admin/product/${params.getValue(params.id, "id")}`}>
+              <EditIcon />
+            </Link>
 
-    //         <Button
-    //           onClick={() =>
-    //             deleteProductHandler(params.getValue(params.id, "id"))
-    //           }
-    //         >
-    //           <DeleteIcon />
-    //         </Button>
-    //       </Fragment>
-    //     );
-    //   },
+            <Button
+              onClick={() =>
+                deleteProductHandler(params.getValue(params.id, "id"))
+              }
+            >
+              <DeleteIcon />
+            </Button>
+          </Fragment>
+        );
+      },
     },
   ];
 
