@@ -27,6 +27,8 @@ import PaymentProtectedRoute from "./components/Route/PaymentProtectedRoute";
 import OrderSuccess from './components/Cart/OrderSuccess';
 import MyOrders from './components/Order/MyOrders';
 import OrderDetails from "./components/Order/OrderDetails";
+import AdminRoute from './components/Route/AdminRoute';
+import Dashboard from './components/Admin/Dashboard.js';
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -80,6 +82,7 @@ function App() {
         <Route exact path='/success' element={<ProtectedRoute component={OrderSuccess}/>}/>
         <Route exact path='/orders' element={<ProtectedRoute component={MyOrders}/>}/>
         <Route exact path='/order/:id' element={<ProtectedRoute component={OrderDetails}/>}/>
+        <Route exact path='/admin/dashboard' element={<AdminRoute component={Dashboard}/>}/>
       </Routes>
       <Footer />
     </Router>

@@ -21,7 +21,7 @@ const UserOptions = ({ user }) => {
   const { cartItems } = useSelector((state) => state.cart);
 
   const dashboard = () => {
-    navigate("/dashboard");
+    navigate("/admin/dashboard");
   };
 
   const orders = () => {

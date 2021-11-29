@@ -7,7 +7,7 @@ const AdminRoute = ({ component: Component }) => {
     if (loading === undefined || loading === true)
         return <></>;
     if (isAuthenticated === false || (user.role !== 'admin')) 
-        <Navigate to='/login'/>;
+        return <Navigate to='/login'/>;
     
     return (
         <Component />
