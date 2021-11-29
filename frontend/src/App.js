@@ -28,7 +28,9 @@ import OrderSuccess from './components/Cart/OrderSuccess';
 import MyOrders from './components/Order/MyOrders';
 import OrderDetails from "./components/Order/OrderDetails";
 import AdminRoute from './components/Route/AdminRoute';
-import Dashboard from './components/Admin/Dashboard.js';
+import Dashboard from './components/Admin/Dashboard';
+import ProductList from './components/Admin/ProductList';
+import NewProduct from './components/Admin/NewProduct';
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -83,6 +85,8 @@ function App() {
         <Route exact path='/orders' element={<ProtectedRoute component={MyOrders}/>}/>
         <Route exact path='/order/:id' element={<ProtectedRoute component={OrderDetails}/>}/>
         <Route exact path='/admin/dashboard' element={<AdminRoute component={Dashboard}/>}/>
+        <Route exact path='/admin/products' element={<AdminRoute component={ProductList}/>}/>
+        <Route exact path='/admin/product' element={<AdminRoute component={NewProduct}/>}/>
       </Routes>
       <Footer />
     </Router>

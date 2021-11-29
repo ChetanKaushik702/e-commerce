@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Dashboard.css";
 import Sidebar from "./Sidebar.js";
 import MetaData from "../layout/MetaData";
@@ -16,6 +16,9 @@ import {
   Legend,
   ArcElement
 } from "chart.js";
+import { useSelector, useDispatch } from "react-redux";
+import { useAlert } from "react-alert";
+import { clearErrors, getAdminProduct } from "../../actions/productAction";
 
 const Dashboard = () => {
   ChartJS.register(
@@ -28,6 +31,19 @@ const Dashboard = () => {
     Tooltip,
     Legend
   );
+
+  const dispatch = useDispatch();
+  const alert = useAlert();
+
+  const { error, products } = useSelector(state => state.products);
+
+  let outOfStock = 0;
+
+  products && products.forEach(product => {
+    if (product.stock === 0)
+      outOfStock += 1;
+  });
+
   const lineState = {
     labels: ["Initial Amount", "Amount Earned"],
     datasets: [
@@ -46,10 +62,18 @@ const Dashboard = () => {
       {
         backgroundColor: ["#00A6B4", "#6800B4"],
         hoverBackgroundColor: ["#4B5000", "#35014F"],
-        data: [2,10],
+        data: [outOfStock, products.length - outOfStock],
       },
     ],
   };
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+    dispatch(getAdminProduct());
+  }, [error, dispatch, alert]);
 
   return (
     <div className="dashboard">
@@ -66,7 +90,7 @@ const Dashboard = () => {
           <div className="dashboardSummaryBox2">
             <Link to="/admin/products">
               <p>Products</p>
-              <p>50</p>
+              <p>{products ? products.length : 0}</p>
             </Link>
             <Link to="/admin/orders">
               <p>Orders</p>
