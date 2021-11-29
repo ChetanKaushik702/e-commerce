@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { CgMouse } from 'react-icons/cg';
 import MetaData from '../layout/MetaData';
 import './Home.css';
-import Product from './ProductCard';
+import ProductCard from './ProductCard';
 import { clearErrors, getProduct } from '../../actions/productAction';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../layout/Loader/Loader';
@@ -42,7 +42,7 @@ function Home() {
         
                     <div className="container" id="container">
                         {
-                            products && products.map((product, idx) => <Product key={idx} product={product} />)
+                            products && products.map((product, idx) => <ProductCard key={idx} product={product} />)
                         }
                     </div>
                 </>

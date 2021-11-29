@@ -92,11 +92,11 @@ const createProductReview = AsyncErrorHandler(async (req, res, next) => {
         return next(new ErrorHandler(`Product with productId: ${productId} doesn\'t exist`, 400));
     }
 
-    const isAlreadyReviewed = product.reviews.find(rev => rev.user.toString() === req.user._id);
+    const isAlreadyReviewed = product.reviews.find(rev => rev.user.toString() === req.user._id.toString());
 
     if (isAlreadyReviewed) {
         product.reviews.find(rev => {
-            if (rev.user.toString() === req.user._id) {
+            if (rev.user.toString() === req.user._id.toString()) {
                 rev.rating = rating;
                 rev.comment = comment;
             }
