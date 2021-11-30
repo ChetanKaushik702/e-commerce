@@ -68,7 +68,7 @@ const getAllOrders = AsyncErrorHandler(async (req, res, next) => {
 // Update order status : ADMIN
 const updateOrder = AsyncErrorHandler(async (req, res, next) => {
     const order = await Order.findById(req.params.id);
-
+    
     if (!order) {
         return next(new ErrorHandler('Order doesn\'t exist with this id', 404));
     }
@@ -77,9 +77,11 @@ const updateOrder = AsyncErrorHandler(async (req, res, next) => {
         return next(new ErrorHandler('You have already delivered this order', 400));
     }
 
-    order.orderItems.forEach(async (order) => {
-        await updateStock(order.product, order.quantity);
-    })
+    if (req.body.status === 'Shipped') {
+        order.orderItems.forEach(async (order) => {
+            await updateStock(order.product, order.quantity);
+        });
+    }
 
     order.orderStatus = req.body.status;
 
