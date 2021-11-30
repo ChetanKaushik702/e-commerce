@@ -210,7 +210,7 @@ const getAllReviews = AsyncErrorHandler(async (req, res, next) => {
 
 // delete a review
 const deleteReview = AsyncErrorHandler(async (req, res, next) => {
-  const product = await Product.findById(req.params.productId);
+  const product = await Product.findById(req.query.productId);
 
   if (!product) {
     return next(new ErrorHandler("Product not found", 404));

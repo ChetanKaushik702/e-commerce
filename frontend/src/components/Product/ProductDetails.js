@@ -40,7 +40,7 @@ const ProductDetails = () => {
 
   const options = {
     size: 'large',
-    value: product.rating,
+    value: Number(product.rating),
     readOnly: true,
     precision: 0.5
   };
