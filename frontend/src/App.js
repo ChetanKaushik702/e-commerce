@@ -38,6 +38,7 @@ import UsersList from "./components/Admin/UsersList";
 import UpdateUser from "./components/Admin/UpdateUser";
 import ProductReviews from "./components/Admin/ProductReviews";
 import About from "./components/layout/About/About";
+import Contact from "./components/layout/Contact/Contact";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -64,6 +65,7 @@ function App() {
         <Route exact path="/search" element={<Search />} />
         <Route exact path="/login" element={<LoginSignup />} />
         <Route exact path="/about" element={<About />} />
+        <Route exact path="/contact" element={<Contact />} />
         <Route
           exact
           path="/account"
