@@ -226,7 +226,13 @@ const deleteReview = AsyncErrorHandler(async (req, res, next) => {
     sumOfReviews += rev.rating;
   });
 
-  const rating = sumOfReviews / reviews.length;
+  let rating = 0;
+
+  if (reviews.length === 0) {
+    rating = 0;
+  } else {
+    rating = sumOfReviews / reviews.length;
+  }
 
   const numOfReviews = reviews.length;
 
