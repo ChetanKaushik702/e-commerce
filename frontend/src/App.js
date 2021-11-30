@@ -39,6 +39,7 @@ import UpdateUser from "./components/Admin/UpdateUser";
 import ProductReviews from "./components/Admin/ProductReviews";
 import About from "./components/layout/About/About";
 import Contact from "./components/layout/Contact/Contact";
+import NotFound from './components/layout/NotFound/NotFound';
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -103,6 +104,7 @@ function App() {
         <Route exact path='/admin/users' element={<AdminRoute component={UsersList}/>}/>
         <Route exact path='/admin/user/:id' element={<AdminRoute component={UpdateUser}/>}/>
         <Route exact path='/admin/reviews' element={<AdminRoute component={ProductReviews}/>}/>
+        <Route exact path='/*' element={<NotFound />}/>
       </Routes>
       <Footer />
     </Router>
