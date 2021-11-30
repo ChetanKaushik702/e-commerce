@@ -22,6 +22,8 @@ function Home() {
         dispatch(getProduct());
     }, [dispatch, error, alert]);
 
+    window.addEventListener('contextmenu', (e) => e.preventDefault());
+
     return (
         <>
             {loading ? <Loader /> : 
