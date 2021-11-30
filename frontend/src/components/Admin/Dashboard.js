@@ -19,6 +19,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { useAlert } from "react-alert";
 import { clearErrors, getAdminProduct } from "../../actions/productAction";
+import { getAllOrders } from "../../actions/orderAction";
 
 const Dashboard = () => {
   ChartJS.register(
@@ -36,6 +37,8 @@ const Dashboard = () => {
   const alert = useAlert();
 
   const { error, products } = useSelector(state => state.products);
+  const { orders } = useSelector(state => state.allOrders);
+  const { users } = useSelector(state => state.allUsers);
 
   let outOfStock = 0;
 
@@ -73,6 +76,7 @@ const Dashboard = () => {
       dispatch(clearErrors());
     }
     dispatch(getAdminProduct());
+    dispatch(getAllOrders());
   }, [error, dispatch, alert]);
 
   return (
@@ -94,11 +98,11 @@ const Dashboard = () => {
             </Link>
             <Link to="/admin/orders">
               <p>Orders</p>
-              <p>4</p>
+              <p>{ orders ? orders.length : 0 }</p>
             </Link>
             <Link to="/admin/users">
               <p>Users</p>
-              <p>2</p>
+              <p>{ users ? users.length : 0 }</p>
             </Link>
           </div>
         </div>
